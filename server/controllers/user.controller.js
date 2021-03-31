@@ -2,6 +2,8 @@ const User = require('../models/user.model');
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcryptjs');
 const { response } = require('express');
+const {sendingMail} = require("../shared/nodemailer");
+
 
 //hashing password
 const hashPassword = async (user) => {
@@ -47,6 +49,7 @@ exports.signup = async (req,res) => {
         const token = await generateAuthToken(user);
         user.password = undefined;
         res.status(201).json({ user, token });
+        sendingMail("Successfully signedUp in Nishtha's Cloth store 😁!! Happy shopping 😉!!", "Nishtha's Cloth store signUp", user.email);
     } catch (error) {
         return res.status(500).json({ error: "Something went wrong" });
         console.log(error);
